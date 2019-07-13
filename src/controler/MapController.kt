@@ -17,7 +17,7 @@ import view.tile.TileType.ROOM
 import java.sql.Time
 import java.util.*
 
-class MapController(val mapView: MapView) : Controller() {
+class MapController(private val mapView: MapView) : Controller() {
     //private val model = MapModel()
     val elements: ObservableList<Tile> = FXCollections.observableArrayList()
     private val mapHeight: ReadOnlyDoubleProperty
