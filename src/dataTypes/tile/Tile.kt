@@ -1,4 +1,4 @@
-package view.tile
+package dataTypes.tile
 
 import javafx.beans.property.ReadOnlyDoubleProperty
 import javafx.beans.property.SimpleIntegerProperty
@@ -6,7 +6,7 @@ import javafx.scene.Parent
 import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 import tornadofx.*
-import view.tile.TileType.*
+import dataTypes.tile.TileType.*
 
 class Tile(type: TileType, var xIndex: SimpleIntegerProperty, var yIndex: SimpleIntegerProperty, private val mapHeight: ReadOnlyDoubleProperty, private val mapWidth: ReadOnlyDoubleProperty) : View() {
     var type: TileType = WALL

@@ -1,7 +1,6 @@
 package controler
 
 import javafx.animation.Animation
-import javafx.animation.SequentialTransition
 import javafx.animation.Timeline
 import javafx.beans.property.ReadOnlyDoubleProperty
 import javafx.beans.property.SimpleIntegerProperty
@@ -11,11 +10,9 @@ import javafx.event.ActionEvent
 import javafx.event.EventHandler
 import tornadofx.*
 import view.MapView
-import view.tile.Tile
-import view.tile.TileType
-import view.tile.TileType.ROOM
-import java.sql.Time
-import java.util.*
+import dataTypes.tile.Tile
+import dataTypes.tile.TileType
+import dataTypes.tile.TileType.ROOM
 
 class MapController(private val mapView: MapView) : Controller() {
     //private val model = MapModel()
