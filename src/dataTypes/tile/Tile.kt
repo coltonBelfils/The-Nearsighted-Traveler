@@ -7,9 +7,10 @@ import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 import tornadofx.*
 import dataTypes.tile.TileType.*
+import javafx.scene.shape.StrokeType
 
-class Tile(type: TileType, var xIndex: SimpleIntegerProperty, var yIndex: SimpleIntegerProperty, private val mapHeight: ReadOnlyDoubleProperty, private val mapWidth: ReadOnlyDoubleProperty) : View() {
-    var type: TileType = WALL
+class Tile(tileType: TileType, var xIndex: SimpleIntegerProperty, var yIndex: SimpleIntegerProperty, private val mapHeight: ReadOnlyDoubleProperty, private val mapWidth: ReadOnlyDoubleProperty) : View() {
+    var type: TileType = tileType
     lateinit var rectangle: Rectangle
         private set
     override val root: Parent = pane {
@@ -22,16 +23,25 @@ class Tile(type: TileType, var xIndex: SimpleIntegerProperty, var yIndex: Simple
 
             )
             xProperty().bind(
-                mapWidth.divide(3).multiply(xIndex - 1)
+                mapWidth.divide(3).multiply(xIndex)
             )
             yProperty().bind(
-                mapHeight.divide(3).multiply(yIndex - 1)
+                mapHeight.divide(3).multiply(yIndex)
             )
             fill = when (type) {
                 WALL -> Color.BLACK
                 ROOM -> Color.WHITE
+                NONEXISTENT -> Color.RED
             }
             strokeProperty().bind(fillProperty())
+            strokeType = StrokeType.INSIDE
+            /*if(fill == Color.BLACK) {
+                strokeProperty().bind(fillProperty())
+            } else if(xIndex.value in 0..2 && yIndex.value in 0..2) {
+                strokeProperty().bind(fillProperty())
+            } else {
+                stroke = Color.BLACK
+            }*/
         }
     }
 }

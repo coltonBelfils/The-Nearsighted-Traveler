@@ -1,5 +1,6 @@
 package controler
 
+import dataTypes.QuadrantModel
 import javafx.animation.Animation
 import javafx.animation.Timeline
 import javafx.beans.property.ReadOnlyDoubleProperty
@@ -13,31 +14,38 @@ import view.MapView
 import dataTypes.tile.Tile
 import dataTypes.tile.TileType
 import dataTypes.tile.TileType.ROOM
+import dataTypes.tile.TileType.WALL
+import javafx.scene.paint.Color
+import model.MapModel
 
 class MapController(private val mapView: MapView) : Controller() {
-    //private val model = MapModel()
+    private val mapSize = 5
+    private val model = MapModel(mapSize)
     val elements: ObservableList<Tile> = FXCollections.observableArrayList()
     private val mapHeight: ReadOnlyDoubleProperty
         get() = mapView.mapHeight
     private val mapWidth: ReadOnlyDoubleProperty
         get() = mapView.mapWidth
-    private var xPos = 2 //Fake Model
-    private var yPos = 2 //Fake Model
+    private var pos = QuadrantModel(1, 1)
     private var animation: Timeline = Timeline()
+    private var animationSpeed = .25.seconds
 
     init {
-        updateElements(xPos, yPos)
+        updateElements()
     }
 
-    fun updateElements(xPos: Int, yPos: Int) { //Fake Model
+    fun updateElements() {
         elements.clear()
-        for (y in 0 until 5) {
-            for (x in 0 until 5) {
+        for (y in -2..2) {
+            for (x in -2..2) {
+                val currentPos = QuadrantModel(pos.x + x, pos.y + y)
                 elements.add(
-                    if (x == xPos || y == yPos) {
-                        Tile(ROOM, SimpleIntegerProperty(x), SimpleIntegerProperty(y), mapHeight, mapWidth)
-                    } else {
-                        Tile(TileType.WALL, SimpleIntegerProperty(x), SimpleIntegerProperty(y), mapHeight, mapWidth)
+                    Tile(model.getQuadrantValue(currentPos), SimpleIntegerProperty(x + 1), SimpleIntegerProperty(y + 1), mapHeight, mapWidth).apply {
+                        if(currentPos.x == 1 && currentPos.y == 1) {
+                            rectangle.fill = Color.BLUE
+                        } else if(currentPos.x == (mapSize * 2) - 1 && currentPos.y == (mapSize * 2) - 1) {
+                            rectangle.fill = Color.ORANGE
+                        }
                     }
                 )
             }
@@ -45,35 +53,47 @@ class MapController(private val mapView: MapView) : Controller() {
     }
 
     fun inputNorth() {
-        val whenDone = EventHandler<ActionEvent> {
-            yPos-- //Fake Model
-            updateElements(xPos, yPos) //Fake Model
+        val newPos = QuadrantModel(pos.x, pos.y - 1)
+        if(model.getQuadrantValue(newPos) == ROOM) {
+            val whenDone = EventHandler<ActionEvent> {
+                pos = newPos
+                updateElements()
+            }
+            animateNorth(whenDone)
         }
-        animateNorth(whenDone)
     }
 
     fun inputEast() {
-        val whenDone = EventHandler<ActionEvent> {
-            xPos++ //Fake Model
-            updateElements(xPos, yPos) //Fake Model
+        val newPos = QuadrantModel(pos.x + 1, pos.y)
+        if(model.getQuadrantValue(newPos) == ROOM) {
+            val whenDone = EventHandler<ActionEvent> {
+                pos = newPos
+                updateElements()
+            }
+            animateEast(whenDone)
         }
-        animateEast(whenDone)
     }
 
     fun inputSouth() {
-        val whenDone = EventHandler<ActionEvent> {
-            yPos++ //Fake Model
-            updateElements(xPos, yPos) //Fake Model
+        val newPos = QuadrantModel(pos.x, pos.y + 1)
+        if(model.getQuadrantValue(newPos) == ROOM) {
+            val whenDone = EventHandler<ActionEvent> {
+                pos = newPos
+                updateElements()
+            }
+            animateSouth(whenDone)
         }
-        animateSouth(whenDone)
     }
 
     fun inputWest() {
-        val whenDone = EventHandler<ActionEvent> {
-            xPos-- //Fake Model
-            updateElements(xPos, yPos) //Fake Model
+        val newPos = QuadrantModel(pos.x - 1, pos.y)
+        if(model.getQuadrantValue(newPos) == ROOM) {
+            val whenDone = EventHandler<ActionEvent> {
+                pos = newPos
+                updateElements()
+            }
+            animateWest(whenDone)
         }
-        animateWest(whenDone)
     }
 
     fun animate(timeline: Timeline) {
@@ -89,9 +109,9 @@ class MapController(private val mapView: MapView) : Controller() {
         }
         val timeline = Timeline()
         timeline.apply {
-            keyframe(.5.seconds) {
+            keyframe(animationSpeed) {
                 elements.forEach { tile ->
-                    val newPos = tile.rectangle.y - mapHeight.divide(3).value
+                    val newPos = tile.rectangle.y + mapHeight.divide(3).value
                     keyvalue(tile.rectangle.yProperty(), newPos)
                 }
             }
@@ -106,9 +126,9 @@ class MapController(private val mapView: MapView) : Controller() {
         }
         val timeline = Timeline()
         timeline.apply {
-            keyframe(.5.seconds) {
+            keyframe(animationSpeed) {
                 elements.forEach { tile ->
-                    val newPos = tile.rectangle.x + mapWidth.divide(3).value
+                    val newPos = tile.rectangle.x - mapWidth.divide(3).value
                     keyvalue(tile.rectangle.xProperty(), newPos)
                 }
             }
@@ -123,9 +143,9 @@ class MapController(private val mapView: MapView) : Controller() {
         }
         val timeline = Timeline()
         timeline.apply {
-            keyframe(.5.seconds) {
+            keyframe(animationSpeed) {
                 elements.forEach { tile ->
-                    val newPos = tile.rectangle.y + mapHeight.divide(3).value
+                    val newPos = tile.rectangle.y - mapHeight.divide(3).value
                     keyvalue(tile.rectangle.yProperty(), newPos)
                 }
             }
@@ -140,9 +160,9 @@ class MapController(private val mapView: MapView) : Controller() {
         }
         val timeline = Timeline()
         timeline.apply {
-            keyframe(.5.seconds) {
+            keyframe(animationSpeed) {
                 elements.forEach { tile ->
-                    val newPos = tile.rectangle.x - mapWidth.divide(3).value
+                    val newPos = tile.rectangle.x + mapWidth.divide(3).value
                     keyvalue(tile.rectangle.xProperty(), newPos)
                 }
             }
