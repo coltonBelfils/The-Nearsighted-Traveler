@@ -6,6 +6,8 @@ import javafx.collections.FXCollections
 import javafx.scene.Parent
 import tornadofx.*
 import dataTypes.tile.Tile
+import javafx.scene.input.KeyCode
+import javafx.scene.input.KeyEvent
 
 class MapView(val mapHeight: ReadOnlyDoubleProperty, val mapWidth: ReadOnlyDoubleProperty) : View() {
     val controller: MapController = MapController(this)
@@ -16,18 +18,6 @@ class MapView(val mapHeight: ReadOnlyDoubleProperty, val mapWidth: ReadOnlyDoubl
     }
 
     override val root: Parent = pane {
-        shortcut("w") {
-            controller.inputNorth()
-        }
-        shortcut("d") {
-            controller.inputEast()
-        }
-        shortcut("s") {
-            controller.inputSouth()
-        }
-        shortcut("a") {
-            controller.inputWest()
-        }
         bindChildren(elements) {
             it.root
         }

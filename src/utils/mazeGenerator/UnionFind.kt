@@ -3,7 +3,7 @@ package utils.mazeGenerator
 import dataTypes.QuadrantModel
 
 class UnionFind(vertices: Set<QuadrantModel>) {
-    val connectedVertices: HashSet<HashSet<QuadrantModel>> = HashSet()
+    private val connectedVertices: HashSet<HashSet<QuadrantModel>> = HashSet()
     init {
         vertices.forEach { vertex ->
             connectedVertices.add(HashSet<QuadrantModel>().apply {
@@ -26,8 +26,11 @@ class UnionFind(vertices: Set<QuadrantModel>) {
         val set2 = find(vertex2)
 
         if(set1 != HashSet<QuadrantModel>() && set2 != HashSet<QuadrantModel>()) {
+            val newSet = HashSet(set1)
+            newSet.addAll(set2)
+            connectedVertices.remove(set1)
             connectedVertices.remove(set2)
-            set1.addAll(set2)
+            connectedVertices.add(newSet)
         }
     }
 }
