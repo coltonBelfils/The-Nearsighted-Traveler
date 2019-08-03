@@ -1,6 +1,6 @@
 package controler
 
-import dataTypes.QuadrantModel
+import dataTypes.CoordinateModel
 import javafx.animation.Animation
 import javafx.animation.Timeline
 import javafx.beans.property.ReadOnlyDoubleProperty
@@ -26,7 +26,7 @@ class MapController(private val mapView: MapView) : Controller() {
         get() = mapView.mapHeight
     private val mapWidth: ReadOnlyDoubleProperty
         get() = mapView.mapWidth
-    private var pos = QuadrantModel(1, 1)
+    private var pos = CoordinateModel(1, 1)
     private var animation: Timeline = Timeline()
     private var animationSpeed = .25.seconds
 
@@ -38,9 +38,9 @@ class MapController(private val mapView: MapView) : Controller() {
         elements.clear()
         for (y in -2..2) {
             for (x in -2..2) {
-                val currentPos = QuadrantModel(pos.x + x, pos.y + y)
+                val currentPos = CoordinateModel(pos.x + x, pos.y + y)
                 elements.add(
-                    Tile(model.getQuadrantValue(currentPos), SimpleIntegerProperty(x + 1), SimpleIntegerProperty(y + 1), mapHeight, mapWidth).apply {
+                    Tile(model.getCoordinateValue(currentPos), SimpleIntegerProperty(x + 1), SimpleIntegerProperty(y + 1), mapHeight, mapWidth).apply {
                         if(currentPos.x == 1 && currentPos.y == 1) {
                             rectangle.fill = Color.BLUE
                         } else if(currentPos.x == (mapSize * 2) - 1 && currentPos.y == (mapSize * 2) - 1) {
@@ -53,8 +53,8 @@ class MapController(private val mapView: MapView) : Controller() {
     }
 
     fun inputNorth() {
-        val newPos = QuadrantModel(pos.x, pos.y - 1)
-        if(model.getQuadrantValue(newPos) == ROOM) {
+        val newPos = CoordinateModel(pos.x, pos.y - 1)
+        if(model.getCoordinateValue(newPos) == ROOM) {
             val whenDone = EventHandler<ActionEvent> {
                 pos = newPos
                 updateElements()
@@ -64,8 +64,8 @@ class MapController(private val mapView: MapView) : Controller() {
     }
 
     fun inputEast() {
-        val newPos = QuadrantModel(pos.x + 1, pos.y)
-        if(model.getQuadrantValue(newPos) == ROOM) {
+        val newPos = CoordinateModel(pos.x + 1, pos.y)
+        if(model.getCoordinateValue(newPos) == ROOM) {
             val whenDone = EventHandler<ActionEvent> {
                 pos = newPos
                 updateElements()
@@ -75,8 +75,8 @@ class MapController(private val mapView: MapView) : Controller() {
     }
 
     fun inputSouth() {
-        val newPos = QuadrantModel(pos.x, pos.y + 1)
-        if(model.getQuadrantValue(newPos) == ROOM) {
+        val newPos = CoordinateModel(pos.x, pos.y + 1)
+        if(model.getCoordinateValue(newPos) == ROOM) {
             val whenDone = EventHandler<ActionEvent> {
                 pos = newPos
                 updateElements()
@@ -86,8 +86,8 @@ class MapController(private val mapView: MapView) : Controller() {
     }
 
     fun inputWest() {
-        val newPos = QuadrantModel(pos.x - 1, pos.y)
-        if(model.getQuadrantValue(newPos) == ROOM) {
+        val newPos = CoordinateModel(pos.x - 1, pos.y)
+        if(model.getCoordinateValue(newPos) == ROOM) {
             val whenDone = EventHandler<ActionEvent> {
                 pos = newPos
                 updateElements()

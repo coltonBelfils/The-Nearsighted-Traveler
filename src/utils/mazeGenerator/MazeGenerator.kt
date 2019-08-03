@@ -1,7 +1,7 @@
 package utils.mazeGenerator
 
 import dataTypes.EdgeModel
-import dataTypes.QuadrantModel
+import dataTypes.CoordinateModel
 import dataTypes.tile.TileType
 import dataTypes.tile.TileType.*
 
@@ -13,9 +13,9 @@ class MazeGenerator(private val size: Int) {
     }
     private val allEdges: HashSet<EdgeModel> = HashSet()
     private val allEdgesInMaze: HashSet<EdgeModel> = HashSet()
-    private val allVertices: HashSet<QuadrantModel> = HashSet()
+    private val allVertices: HashSet<CoordinateModel> = HashSet()
     private val vertices = Array(size * size) {
-        QuadrantModel(it / size, it % size)
+        CoordinateModel(it / size, it % size)
     }
     private val unionFind: UnionFind
     var count = true
@@ -23,21 +23,21 @@ class MazeGenerator(private val size: Int) {
         allVertices.addAll(vertices)
         unionFind = UnionFind(allVertices)
         vertices.forEach {
-            var up: QuadrantModel? = null
-            var right: QuadrantModel? = null
-            var down: QuadrantModel? = null
-            var left: QuadrantModel? = null
+            var up: CoordinateModel? = null
+            var right: CoordinateModel? = null
+            var down: CoordinateModel? = null
+            var left: CoordinateModel? = null
             if (it.y > 0) {
-                up = QuadrantModel(it.x, it.y - 1)
+                up = CoordinateModel(it.x, it.y - 1)
             }
             if(it.x < size - 1) {
-                right = QuadrantModel(it.x + 1, it.y)
+                right = CoordinateModel(it.x + 1, it.y)
             }
             if(it.y < size - 1) {
-                down = QuadrantModel(it.x, it.y + 1)
+                down = CoordinateModel(it.x, it.y + 1)
             }
             if(it.x > 0) {
-                left = QuadrantModel(it.x - 1, it.y)
+                left = CoordinateModel(it.x - 1, it.y)
             }
             for(vertex in listOfNotNull(up, right, down, left)) {
                 allEdges.add(EdgeModel(it, vertex))
@@ -76,9 +76,9 @@ class MazeGenerator(private val size: Int) {
         vertices.forEach {
             val tilePos = roomToTile(it)
             map[tilePos.y][tilePos.x] = ROOM
-            val downLink = QuadrantModel(it.x, it.y + 1)
+            val downLink = CoordinateModel(it.x, it.y + 1)
             val downEdge = EdgeModel(it, downLink)
-            val rightLink = QuadrantModel(it.x + 1, it.y)
+            val rightLink = CoordinateModel(it.x + 1, it.y)
             val rightEdge = EdgeModel(it, rightLink)
             if(allEdgesInMaze.contains(downEdge)) {
                 map[tilePos.y + 1][tilePos.x] = ROOM
@@ -95,9 +95,9 @@ class MazeGenerator(private val size: Int) {
                 } else if(y % 2 == 0 && x % 2 == 0) {
                     val mazeX = (x - 1) / 2
                     val mazeY = (y - 1) / 2
-                    val vertex = QuadrantModel(mazeX, mazeY)
-                    val xPlusOne = QuadrantModel(mazeX + 1, mazeY)
-                    val yPlusOne = QuadrantModel(mazeX, mazeY + 1)
+                    val vertex = CoordinateModel(mazeX, mazeY)
+                    val xPlusOne = CoordinateModel(mazeX + 1, mazeY)
+                    val yPlusOne = CoordinateModel(mazeX, mazeY + 1)
                     map[y][x] = ROOM
                     map[xPlusOne.y][xPlusOne.x] = if(allEdgesInMaze.contains(EdgeModel(vertex, xPlusOne))) {
                         ROOM
@@ -114,23 +114,23 @@ class MazeGenerator(private val size: Int) {
         }*/
     }
 
-    private fun roomToTile(room: QuadrantModel): QuadrantModel {
+    private fun roomToTile(room: CoordinateModel): CoordinateModel {
         val xPos = if(room.x in 0 until size) {
             (room.x * 2) + 1
         } else {
-            return QuadrantModel(-1, -1)
+            return CoordinateModel(-1, -1)
         }
 
         val yPos = if(room.y in 0 until size) {
             (room.y * 2) + 1
         } else {
-            return QuadrantModel(-1, -1)
+            return CoordinateModel(-1, -1)
         }
-        return QuadrantModel(xPos, yPos)
+        return CoordinateModel(xPos, yPos)
     }
 
     /*
-    fun tileToRoom(tile: QuadrantModel): QuadrantModel {
+    fun tileToRoom(tile: CoordinateModel): CoordinateModel {
         val xPos = when {
             tile.x % 2 == 0 ->  {
                 -1

@@ -1,18 +1,18 @@
 package utils.mazeGenerator
 
-import dataTypes.QuadrantModel
+import dataTypes.CoordinateModel
 
-class UnionFind(vertices: Set<QuadrantModel>) {
-    private val connectedVertices: HashSet<HashSet<QuadrantModel>> = HashSet()
+class UnionFind(vertices: Set<CoordinateModel>) {
+    private val connectedVertices: HashSet<HashSet<CoordinateModel>> = HashSet()
     init {
         vertices.forEach { vertex ->
-            connectedVertices.add(HashSet<QuadrantModel>().apply {
+            connectedVertices.add(HashSet<CoordinateModel>().apply {
                 add(vertex)
             })
         }
     }
 
-    fun find(vertex: QuadrantModel): HashSet<QuadrantModel> {
+    fun find(vertex: CoordinateModel): HashSet<CoordinateModel> {
         for (set in connectedVertices) {
             if(set.contains(vertex)) {
                 return set
@@ -21,11 +21,11 @@ class UnionFind(vertices: Set<QuadrantModel>) {
         return HashSet()
     }
 
-    fun union(vertex1: QuadrantModel, vertex2: QuadrantModel) {
+    fun union(vertex1: CoordinateModel, vertex2: CoordinateModel) {
         val set1 = find(vertex1)
         val set2 = find(vertex2)
 
-        if(set1 != HashSet<QuadrantModel>() && set2 != HashSet<QuadrantModel>()) {
+        if(set1 != HashSet<CoordinateModel>() && set2 != HashSet<CoordinateModel>()) {
             val newSet = HashSet(set1)
             newSet.addAll(set2)
             connectedVertices.remove(set1)

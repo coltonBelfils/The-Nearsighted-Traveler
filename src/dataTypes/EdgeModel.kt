@@ -1,6 +1,6 @@
 package dataTypes
 
-class EdgeModel(val e1: QuadrantModel, val e2: QuadrantModel) {
+class EdgeModel(val e1: CoordinateModel, val e2: CoordinateModel) {
     override fun equals(other: Any?): Boolean {
         if(other !is EdgeModel) return false
         return when (e1) {

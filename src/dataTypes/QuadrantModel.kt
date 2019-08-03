@@ -1,12 +1,12 @@
 package dataTypes
 
-class QuadrantModel(val x: Int, val y: Int) {
+class CoordinateModel(val x: Int, val y: Int) {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as QuadrantModel
+        other as CoordinateModel
 
         if (x != other.x) return false
         if (y != other.y) return false
