@@ -1,8 +1,13 @@
 import com.sun.javafx.tk.Toolkit
+import javafx.application.Application
 import javafx.stage.Screen
 import javafx.stage.Stage
 import tornadofx.*
 import view.StartupView
+
+fun main(args: Array<String>) {
+    Application.launch(AppLaunch::class.java, *args)
+}
 
 class AppLaunch : App(StartupView::class) {
     override fun start(stage: Stage) {

@@ -10,4 +10,7 @@ how to better use a gui framework(stuff that applies to javafx and gui stuff as 
 any better ways to generate and display the maze on screen, 
 and anything else.
 
-Thanks!
+**Thanks!**
+
+Also *White Blood Cells* I was using it for testing just to change it up, 
+and just thought i'd keep it around for now.
